@@ -7,3 +7,5 @@
 /.idea/dictionaries/User.xml
 /.idea/vcs.xml
 /superlists/geckodriver.log
+/.idea/dataSources.xml
+/identifier.sqlite
