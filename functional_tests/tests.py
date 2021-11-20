@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
 import time
 import unittest
 
@@ -8,7 +9,7 @@ import unittest
 # binary_yandex_driver_file = 'yandexdriver.exe'  # path to YandexDriver
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     """тест нового посетителя"""
 
     def setUp(self):
@@ -18,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def tearDown(self):
         """демонтаж"""
-        self.browser.quit()
+        # self.browser.quit()
 
     def check_for_row_in_list_table(self, row_text):
         """подтверждение строки в таблице списка"""
@@ -30,7 +31,7 @@ class NewVisitorTest(unittest.TestCase):
         """тест: можно начать список и получить его позже"""
         # Эдит слышала про крутое новое онлайн-приложение со списком
         # неотложных дел. Она решает оценить его домашнюю страницу
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # Она видит, что заголовок и шапка страницы говорят о списках
         # неотложных дел
@@ -49,7 +50,7 @@ class NewVisitorTest(unittest.TestCase):
         # содержит "1: Купить павлиньи перья" в качестве элемента списка
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-        self.check_for_row_in_list_table('4: Купить павлиньи перья')
+        self.check_for_row_in_list_table('1: Купить павлиньи перья')
 
         # Текстовое поле по-прежнему приглашает ее добавить еще один элемент.
         # Она вводит "Сделать мушку из павлиньих перьев" (Эдит очень методична)
@@ -59,8 +60,8 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
 
         # Страница снова обновляется, и теперь показывает оба элемента ее списка
-        self.check_for_row_in_list_table('4: Купить павлиньи перья')
-        self.check_for_row_in_list_table('16: Сделать мушку из павлиньих перьев')
+        self.check_for_row_in_list_table('1: Купить павлиньи перья')
+        self.check_for_row_in_list_table('2: Сделать мушку из павлиньих перьев')
         # Эдит интересно, запомнит ли сайт ее список. Далее она видит, что
         # сайт сгенерировал для нее уникальный URL-адрес – об этом
         # выводится небольшой текст с объяснениями.

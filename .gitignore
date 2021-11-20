@@ -9,3 +9,4 @@
 /superlists/geckodriver.log
 /.idea/dataSources.xml
 /identifier.sqlite
+/functional_tests/geckodriver.log
