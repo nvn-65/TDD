@@ -98,7 +98,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Фрэнсиспосещает домашнюю страницу. Нет никаких признаков списка Эдит
         self.browser.get(self.live_server_url)
-        page_text = self.browser.find_elements(By.TAG_NAME, 'body').text
+        page_text = self.browser.find_element(By.TAG_NAME, 'body').text
         self.assertNotIn('Купить павлиньи перья', page_text)
         self.assertNotIn('Сделать мушку', page_text)
 
