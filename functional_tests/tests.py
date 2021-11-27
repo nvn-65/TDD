@@ -87,7 +87,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Она замечает, что её список имеет уникальный URL-адрес
         edith_list_url = self.browser.current_url
-        self.assertRegex(edith_list_url, '/list/.+')
+        self.assertRegex(edith_list_url, '/lists/.+')
 
         # Теперь новый пользователь, Фрэнсис, приходит на сайт.
 
