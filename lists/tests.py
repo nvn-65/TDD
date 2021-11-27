@@ -2,13 +2,28 @@ from django.test import TestCase
 from lists.models import Item
 
 
+class NewListTest(TestCase):
+    """тест нового списка"""
+
+    def test_can_save_a_POST_request(self):
+        """тест: можно сохранить post-запрос"""
+        self.client.post('/lists/new', data={'item_text': 'Новый элемент списка'})
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, 'Новый элемент списка')
+
+    def test_redirects_after_POST(self):
+        """тест: переадресует после post-запроса"""
+        response = self.client.post('/lists/new', data={'item_text': 'Новый элемент списка'})
+        self.assertRedirects(response, '/lists/new')
+
 class ListViewTest(TestCase):
     """тест: представления списка"""
 
     def test_uses_list_templates(self):
         """тест: исплбзуется шаблон списка"""
         response = self.client.get('/lists/один-единственный/')
-        self.assertTemplateUsed(response, 'list.thml')
+        self.assertTemplateUsed(response, 'list.html')
 
     def test_display_all_items(self):
         """тест: отображаются все элементы списка"""
@@ -40,26 +55,10 @@ class ItemModelTest(TestCase):
 class HomePageTest(TestCase):
     """Тест домашней страницы"""
 
-    def test_only_saves_item_whem_necessary(self):
-        """тест: сохраняет элементы, только когда нужно"""
-        self.client.get('/')
-        self.assertEqual(Item.objects.count(), 0)
-
     def test_uses_home_template(self):
         """тест: используется домашний шаблон"""
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
 
-    def test_can_save_a_POST_request(self):
-        """тест: можно сохранить post-запрос"""
-        self.client.post('/', data={'item_text': 'Новый элемент списка'})
 
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, 'Новый элемент списка')
 
-    def test_redirects_after_POST(self):
-        """тест: переадресует после post-запроса"""
-        response = self.client.post('/', data={'item_text': 'Новый элемент списка'})
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/один-единственный/')

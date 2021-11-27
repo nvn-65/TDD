@@ -46,7 +46,7 @@ class NewVisitorTest(LiveServerTestCase):
         # неотложных дел
         self.assertIn('To-Do lists', self.browser.title)
         header_text = self.browser.find_element(By.TAG_NAME, 'h1').text
-        self.assertIn('Ваш список дел', header_text)
+        self.assertIn('Начать новый список неотложных дел', header_text)
 
         # Ей сразу же предлагается ввести элемент списка
         inputbox = self.browser.find_element(By.ID, 'id_new_item')
