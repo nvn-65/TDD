@@ -1,5 +1,5 @@
 from django.test import TestCase
-from lists.models import Item
+from lists.models import Item, List
 
 
 class NewListTest(TestCase):
@@ -27,30 +27,45 @@ class ListViewTest(TestCase):
 
     def test_display_all_items(self):
         """тест: отображаются все элементы списка"""
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
+        list_ = List.objects.create()
+        Item.objects.create(text='itemey 1', list=list_)
+        Item.objects.create(text='itemey 2', list=list_)
 
         response = self.client.get('/lists/один-единственный/')
 
         self.assertContains(response, 'itemey 1')
         self.assertContains(response, 'itemey 2')
 
-class ItemModelTest(TestCase):
+class ListAndItemModelTest(TestCase):
     """тест модели элемента списка"""
 
     def test_saving_and_retrieving_items(self):
         """тест сохранения и получения элементав списка"""
+        list_ = List()
+        list_.save()
+
         first_item = Item()
         first_item.text = 'Первый (когда-либо) элемент списка'
+        first_item.list = list_
         first_item.save()
 
         second_item = Item()
         second_item.text = 'Пункт второй'
+        second_item.list = list_
         second_item.save()
 
-        save_items = Item.objects.all()
-        self.assertEqual(first_item.text, 'Первый (когда-либо) элемент списка')
-        self.assertEqual(second_item.text, 'Пункт второй')
+        saved_list = List.objects.first()
+        self.assertEqual(saved_list, list_)
+
+        saved_items = Item.objects.all()
+        self.assertEqual(saved_items.count(), 2)
+
+        first_saved_item = saved_items[0]
+        second_saved_item = saved_items[1]
+        self.assertEqual(first_saved_item.text, 'Первый (когда-либо) элемент списка')
+        self.assertEqual(first_saved_item.list, list_)
+        self.assertEqual(second_saved_item.text, 'Пункт второй')
+        self.assertEqual(second_saved_item.list, list_)
 
 class HomePageTest(TestCase):
     """Тест домашней страницы"""
